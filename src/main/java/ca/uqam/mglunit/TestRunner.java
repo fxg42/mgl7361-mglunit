@@ -9,7 +9,7 @@ public class TestRunner {
 
   private Class testCaseClass;
   private Set<Method> individualTests = new HashSet<Method>();
-  private TestResultLogger results = new TestResultLogger();
+  private TestResultLogger results;
 
   public int run (String testCaseClassName) {
     try {
@@ -22,19 +22,6 @@ public class TestRunner {
       log.log(Level.SEVERE, "Caught expected", ex);
       return 1;
     }
-  }
-
-  public int getTotalNumberOfTests () {
-    return results.getTotalNumberOfTests();
-  }
-  public int getNumberOfFailedTests () {
-    return results.getNumberOfFailedTests();
-  }
-  public int getNumberOfPassedTests () {
-    return results.getNumberOfPassedTests();
-  }
-  public String getSummary () {
-    return results.getSummary();
   }
 
   private Set<Method> findTestMethods (Class testCaseClass) throws Exception {
@@ -50,9 +37,26 @@ public class TestRunner {
     for (Method test : individualTests)
       try {
         test.invoke(testCase);
-        results.addOnePassedTest();
+        results.addPassedTest(test);
       } catch (Throwable t) {
-        results.addOneFailedTest();
+        results.addFailedTest(test, t.getCause());
       }
+  }
+
+  public int getTotalNumberOfTests () {
+    return results.getTotalNumberOfTests();
+  }
+  public int getNumberOfFailedTests () {
+    return results.getNumberOfFailedTests();
+  }
+  public int getNumberOfPassedTests () {
+    return results.getNumberOfPassedTests();
+  }
+  public String getSummary () {
+    return results.getSummary();
+  }
+
+  void setTestResultLogger (TestResultLogger testResultLogger) {
+    this.results = testResultLogger;
   }
 }

@@ -11,4 +11,8 @@ public class SimpleTestWithAssert {
   @Test public void it_uses_the_assertequals_method_and_fails () {
     assertEquals(1, 2);
   }
+
+  @Test public void another_test_that_uses_the_assertequals_method_and_fails () {
+    assertEquals("foo", "bar");
+  }
 }

@@ -1,15 +1,23 @@
 package ca.uqam.mglunit;
 
+import java.lang.reflect.*;
+import java.io.*;
+
 public class TestResultLogger {
   private int failedTests = 0;
   private int passedTests = 0;
   private String testCaseClassName = "";
+  private OutputStream outputStream;
 
-  public void addOneFailedTest () {
-    failedTests += 1;
-  }
-  public void addOnePassedTest () {
+  public void addPassedTest (Method test) {
     passedTests += 1;
+  }
+  public void addFailedTest (Method test, Throwable t) {
+    failedTests += 1;
+    PrintWriter writer = new PrintWriter(outputStream);
+    t.printStackTrace(writer);
+    writer.flush();
+    writer.close();
   }
   public void setTestCaseClass (Class klass) {
     testCaseClassName = klass.getCanonicalName();
@@ -34,5 +42,9 @@ public class TestResultLogger {
               getTotalNumberOfTests(),
               getNumberOfFailedTests()))
         .toString();
+  }
+
+  void setOutputStream (OutputStream outputStream) {
+    this.outputStream = outputStream;
   }
 }
