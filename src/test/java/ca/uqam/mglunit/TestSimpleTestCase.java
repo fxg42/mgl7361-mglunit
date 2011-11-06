@@ -13,4 +13,11 @@ public class TestSimpleTestCase {
     assertEquals(3, runner.getTotalNumberOfTests());
   }
 
+  @org.junit.Test public void it_executes_all_test_methods () {
+    TestRunner runner = new TestRunner();
+    int retval = runner.run("samples.SimpleTest");
+
+    assertEquals(1, runner.getNumberOfFailedTests());
+    assertEquals(2, runner.getNumberOfPassedTests());
+  }
 }
