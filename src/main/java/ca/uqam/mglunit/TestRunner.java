@@ -9,12 +9,12 @@ public class TestRunner {
 
   private Class testCaseClass;
   private Set<Method> individualTests = new HashSet<Method>();
-  private int numberOfFailedTests;
-  private int numberOfPassedTests;
+  private TestResultLogger results = new TestResultLogger();
 
   public int run (String testCaseClassName) {
     try {
       testCaseClass = Class.forName(testCaseClassName);
+      results.setTestCaseClass(testCaseClass);
       individualTests = findTestMethods(testCaseClass);
       executeTestCase();
       return 0;
@@ -25,26 +25,16 @@ public class TestRunner {
   }
 
   public int getTotalNumberOfTests () {
-    return individualTests.size();
+    return results.getTotalNumberOfTests();
   }
   public int getNumberOfFailedTests () {
-    return numberOfFailedTests;
+    return results.getNumberOfFailedTests();
   }
   public int getNumberOfPassedTests () {
-    return numberOfPassedTests;
+    return results.getNumberOfPassedTests();
   }
-
   public String getSummary () {
-    if (numberOfFailedTests == 0) return "";
-
-    return new StringBuilder()
-        .append("Test ")
-        .append(testCaseClass.getCanonicalName())
-        .append(" FAILED\n")
-        .append(String.format("%d tests completed, %d failure",
-              getTotalNumberOfTests(),
-              getNumberOfFailedTests()))
-        .toString();
+    return results.getSummary();
   }
 
   private Set<Method> findTestMethods (Class testCaseClass) throws Exception {
@@ -60,9 +50,9 @@ public class TestRunner {
     for (Method test : individualTests)
       try {
         test.invoke(testCase);
-        numberOfPassedTests += 1;
+        results.addOnePassedTest();
       } catch (Throwable t) {
-        numberOfFailedTests += 1;
+        results.addOneFailedTest();
       }
   }
 }
