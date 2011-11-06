@@ -28,4 +28,14 @@ public class TestSimpleTestCase {
     assertEquals(1, runner.getNumberOfFailedTests());
     assertEquals(1, runner.getNumberOfPassedTests());
   }
+
+  @org.junit.Test public void it_records_the_results () {
+    TestRunner runner = new TestRunner();
+    int retval = runner.run("samples.SimpleTest");
+
+    String expected =
+      "Test samples.SimpleTest FAILED\n" +
+      "3 tests completed, 1 failure";
+    assertEquals(expected, runner.getSummary());
+  }
 }

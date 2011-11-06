@@ -34,6 +34,19 @@ public class TestRunner {
     return numberOfPassedTests;
   }
 
+  public String getSummary () {
+    if (numberOfFailedTests == 0) return "";
+
+    return new StringBuilder()
+        .append("Test ")
+        .append(testCaseClass.getCanonicalName())
+        .append(" FAILED\n")
+        .append(String.format("%d tests completed, %d failure",
+              getTotalNumberOfTests(),
+              getNumberOfFailedTests()))
+        .toString();
+  }
+
   private Set<Method> findTestMethods (Class testCaseClass) throws Exception {
     Set<Method> result = new HashSet<Method>();
     for (Method method : testCaseClass.getMethods())
