@@ -20,4 +20,12 @@ public class TestSimpleTestCase {
     assertEquals(1, runner.getNumberOfFailedTests());
     assertEquals(2, runner.getNumberOfPassedTests());
   }
+
+  @org.junit.Test public void it_uses_the_assert_methods () {
+    TestRunner runner = new TestRunner();
+    int retval = runner.run("samples.SimpleTestWithAssert");
+
+    assertEquals(1, runner.getNumberOfFailedTests());
+    assertEquals(1, runner.getNumberOfPassedTests());
+  }
 }
