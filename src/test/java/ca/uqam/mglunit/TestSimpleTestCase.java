@@ -51,7 +51,6 @@ public class TestSimpleTestCase {
     int retval = runner.run("samples.SimpleTestWithAssert");
 
     String actual = ((ByteArrayOutputStream) outputStream).toString("UTF-8");
-    System.out.println(actual);
     assertTrue(actual.contains("expected:<1> but was:<2>"));
     assertTrue(actual.contains("expected:<foo> but was:<bar>"));
   }
