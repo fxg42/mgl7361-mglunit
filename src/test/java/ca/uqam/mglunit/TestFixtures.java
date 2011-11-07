@@ -18,7 +18,8 @@ public class TestFixtures {
   }
 
   @org.junit.Test public void it_executes_test_fixtures () {
-    runner.run("samples.SimpleTestWithFixtures");
+    runner.setSpecificationClass(samples.SimpleTestWithFixtures.class);
+    runner.run();
     
     samples.SimpleTestWithFixtures testcase = (samples.SimpleTestWithFixtures) ((TestCaseRunner) runner.getRootTestRunner()).getSpecification();
     assertEquals("btabtabta", testcase.callSequence);

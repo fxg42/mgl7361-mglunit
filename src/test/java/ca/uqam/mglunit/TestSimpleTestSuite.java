@@ -18,7 +18,8 @@ public class TestSimpleTestSuite {
   }
 
   @org.junit.Test public void it_executes_all_tests () throws Exception {
-    int retval = runner.run("samples.SimpleTestSuite");
+    runner.setSpecificationClass(samples.SimpleTestSuite.class);
+    int retval = runner.run();
 
     assertEquals(0, retval);
     assertEquals(6, results.getTotalNumberOfTests());

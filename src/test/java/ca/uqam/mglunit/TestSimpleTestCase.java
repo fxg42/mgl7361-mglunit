@@ -18,28 +18,32 @@ public class TestSimpleTestCase {
   }
 
   @org.junit.Test public void it_finds_all_individual_test_methods () {
-    int retval = runner.run("samples.SimpleTest");
+    runner.setSpecificationClass(samples.SimpleTest.class);
+    int retval = runner.run();
 
     assertEquals(0, retval);
     assertEquals(3, results.getTotalNumberOfTests());
   }
 
   @org.junit.Test public void it_executes_all_test_methods () {
-    int retval = runner.run("samples.SimpleTest");
+    runner.setSpecificationClass(samples.SimpleTest.class);
+    int retval = runner.run();
 
     assertEquals(1, results.getNumberOfFailedTests());
     assertEquals(2, results.getNumberOfPassedTests());
   }
 
   @org.junit.Test public void it_uses_the_assert_methods () {
-    int retval = runner.run("samples.SimpleTestWithAssert");
+    runner.setSpecificationClass(samples.SimpleTestWithAssert.class);
+    int retval = runner.run();
 
     assertEquals(2, results.getNumberOfFailedTests());
     assertEquals(1, results.getNumberOfPassedTests());
   }
 
   @org.junit.Test public void it_records_the_results_and_prints_summary () {
-    int retval = runner.run("samples.SimpleTest");
+    runner.setSpecificationClass(samples.SimpleTest.class);
+    int retval = runner.run();
 
     String expected =
       "Test samples.SimpleTest FAILED\n" +
@@ -48,7 +52,8 @@ public class TestSimpleTestCase {
   }
 
   @org.junit.Test public void it_records_the_results_and_prints_details () throws Exception {
-    int retval = runner.run("samples.SimpleTestWithAssert");
+    runner.setSpecificationClass(samples.SimpleTestWithAssert.class);
+    int retval = runner.run();
 
     String actual = ((ByteArrayOutputStream) outputStream).toString("UTF-8");
     assertTrue(actual.contains("expected:<1> but was:<2>"));
