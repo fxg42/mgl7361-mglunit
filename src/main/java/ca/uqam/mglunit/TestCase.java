@@ -3,12 +3,12 @@ package ca.uqam.mglunit;
 import java.lang.reflect.*;
 import java.util.*;
 
-public class TestCase {
+public class TestCaseRunner {
   private Class specificationClass;
   private Object specification;
   private TestResultLogger results;
 
-  public TestCase (Class specificationClass, TestResultLogger results) throws Exception {
+  public TestCaseRunner (Class specificationClass, TestResultLogger results) throws Exception {
     this.results = results;
     this.specificationClass = specificationClass;
 

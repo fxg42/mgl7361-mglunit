@@ -6,36 +6,36 @@ import static org.junit.Assert.*;
 
 public class TestSimpleTestCase {
   private TestRunner runner;
-  private TestResultLogger logger;
+  private TestResultLogger results;
   private OutputStream outputStream;
 
   @org.junit.Before public void setup () {
     runner = new TestRunner();
-    logger = new TestResultLogger();
+    results = new TestResultLogger();
     outputStream = new ByteArrayOutputStream();
-    logger.setOutputStream(outputStream);
-    runner.setTestResultLogger(logger);
+    results.setOutputStream(outputStream);
+    runner.setTestResultLogger(results);
   }
 
   @org.junit.Test public void it_finds_all_individual_test_methods () {
     int retval = runner.run("samples.SimpleTest");
 
     assertEquals(0, retval);
-    assertEquals(3, runner.getTotalNumberOfTests());
+    assertEquals(3, results.getTotalNumberOfTests());
   }
 
   @org.junit.Test public void it_executes_all_test_methods () {
     int retval = runner.run("samples.SimpleTest");
 
-    assertEquals(1, runner.getNumberOfFailedTests());
-    assertEquals(2, runner.getNumberOfPassedTests());
+    assertEquals(1, results.getNumberOfFailedTests());
+    assertEquals(2, results.getNumberOfPassedTests());
   }
 
   @org.junit.Test public void it_uses_the_assert_methods () {
     int retval = runner.run("samples.SimpleTestWithAssert");
 
-    assertEquals(2, runner.getNumberOfFailedTests());
-    assertEquals(1, runner.getNumberOfPassedTests());
+    assertEquals(2, results.getNumberOfFailedTests());
+    assertEquals(1, results.getNumberOfPassedTests());
   }
 
   @org.junit.Test public void it_records_the_results_and_prints_summary () {
@@ -44,7 +44,7 @@ public class TestSimpleTestCase {
     String expected =
       "Test samples.SimpleTest FAILED\n" +
       "3 tests completed, 1 failure";
-    assertEquals(expected, runner.getSummary());
+    assertEquals(expected, results.getSummary());
   }
 
   @org.junit.Test public void it_records_the_results_and_prints_details () throws Exception {
