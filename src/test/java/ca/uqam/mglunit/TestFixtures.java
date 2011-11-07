@@ -13,7 +13,7 @@ public class TestFixtures {
     runner = new Runner();
     results = new TestResultLogger();
     outputStream = new ByteArrayOutputStream();
-    results.setOutputStream(outputStream);
+    results.addOutputStream(outputStream);
     runner.setTestResultLogger(results);
   }
 

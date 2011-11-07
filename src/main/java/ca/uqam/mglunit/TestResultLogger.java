@@ -8,7 +8,7 @@ public class TestResultLogger {
   private int failedTests = 0;
   private int passedTests = 0;
   private TestRunner currentTestRunner;
-  private OutputStream outputStream;
+  private Set<OutputStream> outputStreams = new HashSet<OutputStream>();
   private Set<TestRunner> testCasesInError = new HashSet<TestRunner>();
 
   public void addPassedTest (Method test) {
@@ -49,13 +49,15 @@ public class TestResultLogger {
   }
 
   private void writeStackTrace (Throwable t) {
-    PrintWriter writer = new PrintWriter(outputStream);
-    t.printStackTrace(writer);
-    writer.flush();
-    writer.close();
+    for (OutputStream each : outputStreams) {
+      PrintWriter writer = new PrintWriter(each);
+      t.printStackTrace(writer);
+      writer.flush();
+      writer.close();
+    }
   }
 
-  void setOutputStream (OutputStream outputStream) {
-    this.outputStream = outputStream;
+  public void addOutputStream (OutputStream outputStream) {
+    this.outputStreams.add(outputStream);
   }
 }
