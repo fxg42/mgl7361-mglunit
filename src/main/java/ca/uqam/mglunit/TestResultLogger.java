@@ -11,6 +11,7 @@ public class TestResultLogger {
   private OutputStream outputStream;
   private Set<TestRunner> testCasesInError = new HashSet<TestRunner>();
   private Set<Throwable> thrown = new HashSet<Throwable>();
+  private Formatter formatter = new PlainFormatter();
 
   public void addPassedTest (Method test) {
     passedTests += 1;
@@ -33,34 +34,27 @@ public class TestResultLogger {
   public int getNumberOfPassedTests () {
     return passedTests;
   }
+  public Set<TestRunner> getTestCasesInError () {
+    return testCasesInError;
+  }
+  public Set<Throwable> getThrownExceptions () {
+    return thrown;
+  }
 
+  public String getSummary () throws Exception {
+    return formatter.formatSummary(this);
+  }
   public void print () throws Exception {
-    outputStream.write((getSummary()+"\n").getBytes("UTF-8"));
-    for (Throwable each : thrown) writeStackTrace(each);
-    outputStream.flush();
+    formatter.print(this);
   }
 
-  public String getSummary () {
-    if (failedTests == 0) return "";
-
-    StringBuilder builder = new StringBuilder();
-
-    for (TestRunner each : testCasesInError)
-      builder.append("Test ").append(each.getName()).append(" FAILED\n");
-    
-    return builder.append(String.format("%d test%s completed, %d failure%s",
-              getTotalNumberOfTests(), (getTotalNumberOfTests() > 1 ? "s" : ""),
-              getNumberOfFailedTests(), (getNumberOfFailedTests() > 1 ? "s" : "")))
-           .toString();
+  OutputStream getOutputStream () {
+    return outputStream;
   }
-
-  private void writeStackTrace (Throwable t) {
-    PrintWriter writer = new PrintWriter(outputStream);
-    t.printStackTrace(writer);
-    writer.flush();
-  }
-
   public void setOutputStream (OutputStream outputStream) {
     this.outputStream = outputStream;
+  }
+  public void setFormatter (Formatter formatter) {
+    this.formatter = formatter;
   }
 }

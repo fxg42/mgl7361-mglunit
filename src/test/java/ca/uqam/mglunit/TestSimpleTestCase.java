@@ -41,7 +41,7 @@ public class TestSimpleTestCase {
     assertEquals(1, results.getNumberOfPassedTests());
   }
 
-  @org.junit.Test public void it_records_the_results_and_prints_summary () {
+  @org.junit.Test public void it_records_the_results_and_prints_summary () throws Exception {
     runner.setSpecificationClass(samples.SimpleTest.class);
     int retval = runner.run();
 

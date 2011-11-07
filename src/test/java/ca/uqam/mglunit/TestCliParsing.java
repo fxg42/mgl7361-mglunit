@@ -30,4 +30,14 @@ public class TestCliParsing {
     assertTrue(contents.contains("expected:<1> but was:<2>"));
     assertTrue(contents.contains("expected:<foo> but was:<bar>"));
   }
+
+  @org.junit.Test public void it_writes_to_an_xml_file () throws Exception {
+    String testClassName = "samples.SimpleTestWithAssert";
+    String outputFilePath = "./build/test."+testClassName+".xml";
+
+    String[] args = { "-o", outputFilePath, "-f", "xml", testClassName };
+    Runner.main(args);
+    
+    String contents = FileUtils.readFileToString(new File(outputFilePath));
+  }
 }
