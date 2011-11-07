@@ -7,6 +7,8 @@ public class TestCaseRunner implements TestRunner {
   private Object specification;
   private TestResultLogger results;
   private Set<Method> testMethods = new HashSet<Method>();
+  private Method setupMethod;
+  private Method teardownMethod;
 
   public TestCaseRunner (Object specification) {
     this.specification = specification;
@@ -24,10 +26,22 @@ public class TestCaseRunner implements TestRunner {
 
   private void runIndividualTest (Method test) {
     try {
+      runFixture(setupMethod);
       test.invoke(specification);
       results.addPassedTest(test);
     } catch (Throwable t) {
       results.addFailedTest(test, t.getCause());
+    } finally {
+      runFixture(teardownMethod);
+    }
+  }
+
+  private void runFixture (Method fixture) {
+    try {
+      if (fixture != null)
+        fixture.invoke(specification);
+    } catch (Exception e) {
+      /* do nothing */
     }
   }
 
@@ -35,8 +49,20 @@ public class TestCaseRunner implements TestRunner {
     testMethods.add(method);
   }
 
+  public void setSetupMethod (Method method) {
+    setupMethod = method;
+  }
+
+  public void setTeardownMethod (Method method) {
+    teardownMethod = method;
+  }
+
   private void setTestResultLogger (TestResultLogger results) {
     this.results = results;
     this.results.setCurrentTestCase(this);
+  }
+
+  Object getSpecification () {
+    return specification;
   }
 }

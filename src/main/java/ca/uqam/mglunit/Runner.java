@@ -9,11 +9,13 @@ public class Runner {
 
   private Class specificationClass;
   private TestResultLogger results;
+  private TestRunner rootTestRunner;
 
   public int run (String className) {
     try {
       specificationClass = Class.forName(className);
-      buildTestFrom(specificationClass).run(results);
+      rootTestRunner = buildTestFrom(specificationClass);
+      rootTestRunner.run(results);
       return 0;
     } catch (Exception ex) {
       logger.log(Level.SEVERE, "Caught expected", ex);
@@ -41,13 +43,19 @@ public class Runner {
   private TestRunner buildTestCaseFrom (Class specificationClass) throws Exception {
     Object specification = specificationClass.newInstance();
     TestCaseRunner testcase = new TestCaseRunner(specification);
-    for (Method each : specificationClass.getMethods())
-      if (each.isAnnotationPresent(Test.class))
-        testcase.addTestMethod(each);
+    for (Method each : specificationClass.getMethods()) {
+      if (each.isAnnotationPresent(Test.class)) testcase.addTestMethod(each);
+      if (each.isAnnotationPresent(Setup.class)) testcase.setSetupMethod(each);
+      if (each.isAnnotationPresent(Teardown.class)) testcase.setTeardownMethod(each);
+    }
     return testcase;
   }
 
   public void setTestResultLogger (TestResultLogger testResultLogger) {
     this.results = testResultLogger;
+  }
+
+  TestRunner getRootTestRunner () {
+    return rootTestRunner;
   }
 }
