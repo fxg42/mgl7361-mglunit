@@ -5,12 +5,12 @@ import org.junit.*;
 import static org.junit.Assert.*; 
 
 public class TestSimpleTestCase {
-  private TestRunner runner;
+  private Runner runner;
   private TestResultLogger results;
   private OutputStream outputStream;
 
   @org.junit.Before public void setup () {
-    runner = new TestRunner();
+    runner = new Runner();
     results = new TestResultLogger();
     outputStream = new ByteArrayOutputStream();
     results.setOutputStream(outputStream);

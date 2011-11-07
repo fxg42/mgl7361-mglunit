@@ -1,26 +1,26 @@
 package ca.uqam.mglunit;
 
-import java.lang.reflect.*;
 import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 public class TestResultLogger {
   private int failedTests = 0;
   private int passedTests = 0;
-  private String testCaseClassName = "";
+  private TestRunner currentTestRunner;
   private OutputStream outputStream;
+  private Set<TestRunner> testCasesInError = new HashSet<TestRunner>();
 
   public void addPassedTest (Method test) {
     passedTests += 1;
   }
   public void addFailedTest (Method test, Throwable t) {
     failedTests += 1;
-    PrintWriter writer = new PrintWriter(outputStream);
-    t.printStackTrace(writer);
-    writer.flush();
-    writer.close();
+    writeStackTrace(t);
+    testCasesInError.add(currentTestRunner);
   }
-  public void setTestCaseClass (Class klass) {
-    testCaseClassName = klass.getCanonicalName();
+  public void setCurrentTestCase (TestRunner runner) {
+    currentTestRunner = runner;
   }
 
   public int getTotalNumberOfTests () {
@@ -36,12 +36,23 @@ public class TestResultLogger {
   public String getSummary () {
     if (failedTests == 0) return "";
 
-    return new StringBuilder()
-        .append("Test ").append(testCaseClassName).append(" FAILED\n")
-        .append(String.format("%d tests completed, %d failure",
-              getTotalNumberOfTests(),
-              getNumberOfFailedTests()))
-        .toString();
+    StringBuilder builder = new StringBuilder();
+    for (TestRunner each : testCasesInError)
+      builder.append("Test ").append(each.getName()).append(" FAILED\n");
+    
+    return builder.append(String.format("%d test%s completed, %d failure%s",
+        getTotalNumberOfTests(),
+        (getTotalNumberOfTests() > 1 ? "s" : ""),
+        getNumberOfFailedTests(),
+        (getNumberOfFailedTests() > 1 ? "s" : "")))
+      .toString();
+  }
+
+  private void writeStackTrace (Throwable t) {
+    PrintWriter writer = new PrintWriter(outputStream);
+    t.printStackTrace(writer);
+    writer.flush();
+    writer.close();
   }
 
   void setOutputStream (OutputStream outputStream) {
