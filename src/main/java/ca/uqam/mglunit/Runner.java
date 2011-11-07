@@ -1,6 +1,5 @@
 package ca.uqam.mglunit;
 
-import java.util.*;
 import java.util.logging.*;
 
 public class Runner {
