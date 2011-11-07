@@ -1,46 +1,21 @@
 package ca.uqam.mglunit;
 
-import java.lang.reflect.*;
-import java.util.*;
 import java.util.logging.*;
 
 public class TestRunner {
-  private static final Logger log = Logger.getLogger(TestRunner.class.getCanonicalName());
+  private static final Logger logger = Logger.getLogger(TestRunner.class.getCanonicalName());
 
-  private Class testCaseClass;
-  private Set<Method> individualTests = new HashSet<Method>();
   private TestResultLogger results;
 
-  public int run (String testCaseClassName) {
+
+  public int run (String className) {
     try {
-      testCaseClass = Class.forName(testCaseClassName);
-      results.setTestCaseClass(testCaseClass);
-      individualTests = findTestMethods(testCaseClass);
-      executeTestCase();
+      new TestCase(Class.forName(className), results).run();
       return 0;
     } catch (Exception ex) {
-      log.log(Level.SEVERE, "Caught expected", ex);
+      logger.log(Level.SEVERE, "Caught expected", ex);
       return 1;
     }
-  }
-
-  private Set<Method> findTestMethods (Class testCaseClass) throws Exception {
-    Set<Method> result = new HashSet<Method>();
-    for (Method method : testCaseClass.getMethods())
-      if (method.isAnnotationPresent(Test.class))
-        result.add(method);
-    return result;
-  }
-
-  private void executeTestCase () throws Exception {
-    Object testCase = testCaseClass.newInstance();
-    for (Method test : individualTests)
-      try {
-        test.invoke(testCase);
-        results.addPassedTest(test);
-      } catch (Throwable t) {
-        results.addFailedTest(test, t.getCause());
-      }
   }
 
   public int getTotalNumberOfTests () {
