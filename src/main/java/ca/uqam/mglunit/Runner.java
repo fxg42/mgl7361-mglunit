@@ -42,18 +42,30 @@ public class Runner {
 
   public static void main (String[] args) throws Exception {
     Runner runner = new Runner();
-    CommandLineParser parser = new GnuParser();
-    CommandLine cli = parser.parse(cliOptions, args);
-    if (cli.hasOption("help") || cli.getArgs().length == 0)
+    TestResultLogger logger = new TestResultLogger();
+    logger.setOutputStream(System.out);
+
+    try {
+      CommandLineParser parser = new GnuParser();
+      CommandLine cli = parser.parse(cliOptions, args);
+      if (cli.hasOption("help") || cli.getArgs().length == 0)
+        printHelp();
+      else {
+        if (cli.hasOption("format") && cli.getOptionValue("format") == "xml") {
+          // TODO: parse format option and instanciate correct formatter
+        }
+        if (cli.hasOption("output")) {
+          // TODO: parse output option and create FileOutputStream
+        }
+
+        runner.setSpecificationClass(Class.forName(cli.getArgs()[0]));
+        runner.setTestResultLogger(logger);
+        runner.run();
+      }
+    } catch (ParseException ex) {
       printHelp();
-    else {
-      // TODO: parse format option and instanciate correct formatter
-      // TODO: parse output option and create FileOutputStream
-      runner.specificationClass = Class.forName(cli.getArgs()[0]);
-      TestResultLogger logger = new TestResultLogger();
-      logger.setOutputStream(System.out);
-      runner.setTestResultLogger(logger);
-      runner.run();
+    } finally {
+      logger.print();
     }
   }
 

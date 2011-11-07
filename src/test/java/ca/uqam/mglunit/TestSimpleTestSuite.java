@@ -20,6 +20,7 @@ public class TestSimpleTestSuite {
   @org.junit.Test public void it_executes_all_tests () throws Exception {
     runner.setSpecificationClass(samples.SimpleTestSuite.class);
     int retval = runner.run();
+    results.print();
 
     assertEquals(0, retval);
     assertEquals(6, results.getTotalNumberOfTests());

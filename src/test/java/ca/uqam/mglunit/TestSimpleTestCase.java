@@ -54,6 +54,7 @@ public class TestSimpleTestCase {
   @org.junit.Test public void it_records_the_results_and_prints_details () throws Exception {
     runner.setSpecificationClass(samples.SimpleTestWithAssert.class);
     int retval = runner.run();
+    results.print();
 
     String actual = ((ByteArrayOutputStream) outputStream).toString("UTF-8");
     assertTrue(actual.contains("expected:<1> but was:<2>"));

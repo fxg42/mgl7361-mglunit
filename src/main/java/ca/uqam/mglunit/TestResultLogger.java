@@ -10,13 +10,14 @@ public class TestResultLogger {
   private TestRunner currentTestRunner;
   private OutputStream outputStream;
   private Set<TestRunner> testCasesInError = new HashSet<TestRunner>();
+  private Set<Throwable> thrown = new HashSet<Throwable>();
 
   public void addPassedTest (Method test) {
     passedTests += 1;
   }
   public void addFailedTest (Method test, Throwable t) {
     failedTests += 1;
-    writeStackTrace(t);
+    thrown.add(t);
     testCasesInError.add(currentTestRunner);
   }
   public void setCurrentTestCase (TestRunner runner) {
@@ -33,19 +34,25 @@ public class TestResultLogger {
     return passedTests;
   }
 
+  public void print () throws Exception {
+    outputStream.write(getSummary().getBytes("UTF-8"));
+    for (Throwable each : thrown) writeStackTrace(each);
+    outputStream.flush();
+    outputStream.close();
+  }
+
   public String getSummary () {
     if (failedTests == 0) return "";
 
     StringBuilder builder = new StringBuilder();
+
     for (TestRunner each : testCasesInError)
       builder.append("Test ").append(each.getName()).append(" FAILED\n");
     
-    return
-      builder.append(
-        String.format("%d test%s completed, %d failure%s",
-            getTotalNumberOfTests(), (getTotalNumberOfTests() > 1 ? "s" : ""),
-            getNumberOfFailedTests(), (getNumberOfFailedTests() > 1 ? "s" : "")))
-      .toString();
+    return builder.append(String.format("%d test%s completed, %d failure%s",
+              getTotalNumberOfTests(), (getTotalNumberOfTests() > 1 ? "s" : ""),
+              getNumberOfFailedTests(), (getNumberOfFailedTests() > 1 ? "s" : "")))
+           .toString();
   }
 
   private void writeStackTrace (Throwable t) {
