@@ -40,11 +40,11 @@ public class TestResultLogger {
     for (TestRunner each : testCasesInError)
       builder.append("Test ").append(each.getName()).append(" FAILED\n");
     
-    return builder.append(String.format("%d test%s completed, %d failure%s",
-        getTotalNumberOfTests(),
-        (getTotalNumberOfTests() > 1 ? "s" : ""),
-        getNumberOfFailedTests(),
-        (getNumberOfFailedTests() > 1 ? "s" : "")))
+    return
+      builder.append(
+        String.format("%d test%s completed, %d failure%s",
+            getTotalNumberOfTests(), (getTotalNumberOfTests() > 1 ? "s" : ""),
+            getNumberOfFailedTests(), (getNumberOfFailedTests() > 1 ? "s" : "")))
       .toString();
   }
 
