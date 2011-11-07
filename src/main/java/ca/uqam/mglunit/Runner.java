@@ -2,7 +2,6 @@ package ca.uqam.mglunit;
 
 import java.util.*;
 import java.util.logging.*;
-import java.lang.reflect.*;
 
 public class Runner {
   private static final Logger logger = Logger.getLogger(Runner.class.getCanonicalName());
