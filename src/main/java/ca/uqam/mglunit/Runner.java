@@ -9,7 +9,7 @@ public class Runner {
 
   static {
     cliOptions.addOption("h", "help", false, "print this message");
-    cliOptions.addOption("o", "file", true, "use given file for output");
+    cliOptions.addOption("o", "output", true, "use given file for output");
     cliOptions.addOption("f", "format", true, "specify output format. Possible values: (plain|xml). Defaults to 'plain'.");
   }
 
@@ -47,6 +47,8 @@ public class Runner {
     if (cli.hasOption("help") || cli.getArgs().length == 0)
       printHelp();
     else {
+      // TODO: parse format option and instanciate correct formatter
+      // TODO: parse output option and create FileOutputStream
       runner.specificationClass = Class.forName(cli.getArgs()[0]);
       TestResultLogger logger = new TestResultLogger();
       logger.setOutputStream(System.out);
