@@ -35,10 +35,9 @@ public class TestResultLogger {
   }
 
   public void print () throws Exception {
-    outputStream.write(getSummary().getBytes("UTF-8"));
+    outputStream.write((getSummary()+"\n").getBytes("UTF-8"));
     for (Throwable each : thrown) writeStackTrace(each);
     outputStream.flush();
-    outputStream.close();
   }
 
   public String getSummary () {
@@ -59,7 +58,6 @@ public class TestResultLogger {
     PrintWriter writer = new PrintWriter(outputStream);
     t.printStackTrace(writer);
     writer.flush();
-    writer.close();
   }
 
   public void setOutputStream (OutputStream outputStream) {

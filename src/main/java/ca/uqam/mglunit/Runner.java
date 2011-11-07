@@ -1,5 +1,6 @@
 package ca.uqam.mglunit;
 
+import java.io.*;
 import java.util.logging.*;
 import org.apache.commons.cli.*;
 
@@ -51,15 +52,9 @@ public class Runner {
       if (cli.hasOption("help") || cli.getArgs().length == 0)
         printHelp();
       else {
-        if (cli.hasOption("format") && cli.getOptionValue("format") == "xml") {
-          // TODO: parse format option and instanciate correct formatter
-        }
-        if (cli.hasOption("output")) {
-          // TODO: parse output option and create FileOutputStream
-        }
-
-        runner.setSpecificationClass(Class.forName(cli.getArgs()[0]));
+        configureLogger(logger, cli);
         runner.setTestResultLogger(logger);
+        runner.setSpecificationClass(Class.forName(cli.getArgs()[0]));
         runner.run();
       }
     } catch (ParseException ex) {
@@ -67,6 +62,14 @@ public class Runner {
     } finally {
       logger.print();
     }
+  }
+
+  private static void configureLogger (TestResultLogger logger, CommandLine cli) throws Exception {
+    if (cli.hasOption("format") && cli.getOptionValue("format") == "xml") {
+      // TODO: parse format option and instanciate correct formatter
+    }
+    if (cli.hasOption("output"))
+      logger.setOutputStream(new FileOutputStream(cli.getOptionValue("output")));
   }
 
   private static void printHelp () {
