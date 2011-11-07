@@ -81,9 +81,9 @@ public class Runner {
   }
 
   private static void configureLogger (TestResultLogger logger, CommandLine cli) throws Exception {
-    if (cli.hasOption("format") && cli.getOptionValue("format") == "xml") {
+    if (cli.hasOption("format") && cli.getOptionValue("format") == "xml")
       logger.setFormatter(new XmlFormatter());
-    }
+
     if (cli.hasOption("output"))
       logger.setOutputStream(new FileOutputStream(cli.getOptionValue("output")));
   }
